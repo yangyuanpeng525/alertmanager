@@ -1,0 +1,20 @@
+
+version : '3.7'
+networks:
+  alertmanager-net:
+    external: true
+services:
+  alertmanager:
+        container_name : alertmanager
+        hostname: alertmanager
+        networks:
+          alertmanager-net:
+        image: registry.cn-hangzhou.aliyuncs.com/yangyuanpeng/alertmanager:0.20.0
+        volumes:
+          - ./alertmanager.yml:/opt/alertmanager/alertmanager.yml
+          - /etc/localtime:/etc/localtime:ro
+        ports :
+                - 9093:9093
+        restart: always
+        environment:
+          TZ: Asia/Shanghai

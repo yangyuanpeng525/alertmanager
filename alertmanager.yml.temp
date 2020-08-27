@@ -1,0 +1,33 @@
+global:
+  resolve_timeout: 5m
+  wechat_api_url: 'https://qyapi.weixin.qq.com/cgi-bin/'
+  wechat_api_secret: 'alZH2jLelgcp26og-I-wedZQFl7eW2h2hrLWLHlzWIs'
+  wechat_api_corp_id: 'ww403f3d2e5a800a7e'
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'devops'
+receivers:
+  - name: 'wechat'
+    wechat_configs:
+    - send_resolved: true
+      to_party: '2'
+      agent_id: '1000007'
+      to_user: 'LiZhiLong'
+
+  - name: 'chenhaitian'
+    email_configs:
+    - to: 'chen.haitian@trs.com.cn'
+
+  - name: 'devops'
+    webhook_configs:
+    - url: 'http://192.168.40.62:8083/dataScreen/instance/alterManager/test'       
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
